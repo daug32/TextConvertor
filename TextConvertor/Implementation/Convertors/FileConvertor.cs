@@ -45,18 +45,28 @@ internal class FileConvertor : IConvertor, IDisposable
 
     private void SanitizeToTemporaryFile( string mainFilePath, string tempFilePath )
     {
+        IEnumerable<string> lines = File.ReadAllLines( mainFilePath );
+        int numberOfLines = lines.Count();
+
         using var writer = new StreamWriter( tempFilePath );
 
-        IEnumerable<string> lines = File.ReadAllLines( mainFilePath );
-
-        int numberOfLines = lines.Count();
-        
         var index = 0;
-        double currentProgress = 0;
         double progress = 0;
-        
-        _timer = new Timer( 
-            _ => ShowProgress( CalculateProgress( index, numberOfLines ), ref progress ),
+
+        _timer = new Timer(
+            _ =>
+            {
+                double progressThresholdToSendMessage = 1;
+
+                double currentProgress = CalculateProgress( index, numberOfLines );
+                if ( currentProgress - progress <= progressThresholdToSendMessage )
+                {
+                    return;
+                }
+
+                MessageHandler?.SendMessage( $"Progress: {currentProgress}%" );
+                progress = currentProgress;
+            },
             null,
             0,
             1000 );
@@ -70,21 +80,12 @@ internal class FileConvertor : IConvertor, IDisposable
         _timer.Dispose();
     }
 
-    private void ShowProgress( double currentProgress, ref double oldProgress )
-    {
-        if ( currentProgress - oldProgress > 1 )
-        {
-            MessageHandler?.SendMessage( $"Progress: {currentProgress}%" );
-            oldProgress = currentProgress;
-        }
-    }
-
-    private double CalculateProgress( int index, int numberOfLines )
+    private static double CalculateProgress( int index, int numberOfLines )
     {
         return Math.Round( index / ( double )numberOfLines * 100, 4 );
     }
 
-    private string GetTemporaryFilePath()
+    private static string GetTemporaryFilePath()
     {
         return $"./temp_{DateTime.Now.Ticks.ToString()}";
     }

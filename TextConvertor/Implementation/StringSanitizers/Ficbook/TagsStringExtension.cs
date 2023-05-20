@@ -2,11 +2,11 @@
 
 namespace TextConvertor.Implementation.StringSanitizers.Ficbook;
 
-public static class TagsStringExtension
+internal static class TagsStringExtension
 {
-    public static string AddTag( this string str, FicbookTag tag )
+    public static string AddTag( this string str, Tag tag )
     {
-        if ( tag != FicbookTags.Tab )
+        if ( tag != Tags.Tab )
         {
             return tag.Append( str );
         }
@@ -20,9 +20,9 @@ public static class TagsStringExtension
         
         string existingTag = matches.Groups[ 1 ].Value;
 
-        if ( existingTag == FicbookTags.Center.Name
-             || existingTag == FicbookTags.Right.Name
-             || existingTag == FicbookTags.Tab.Name )
+        if ( existingTag == Tags.Center.Name
+             || existingTag == Tags.Right.Name
+             || existingTag == Tags.Tab.Name )
         {
             return str;
         }

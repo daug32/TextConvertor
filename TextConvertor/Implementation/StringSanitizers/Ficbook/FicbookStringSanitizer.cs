@@ -32,7 +32,7 @@ internal class FicbookStringSanitizer : IStringSanitizer
         string result = str.TrimAndRemoveConsecutiveSpaces();
         if ( result == "***" )
         {
-            return FicbookTags.Center.Append( result );
+            return Tags.Center.Append( result );
         }
         
         foreach ( KeyValuePair<string, string> replace in _stringReplaces )
@@ -45,6 +45,6 @@ internal class FicbookStringSanitizer : IStringSanitizer
             result = Regex.Replace( result, replace.Key, replace.Value );
         }
         
-        return result.AddTag( FicbookTags.Tab );
+        return result.AddTag( Tags.Tab );
     }
 }
