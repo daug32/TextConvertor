@@ -5,7 +5,7 @@ An automatization for Ficbook text sanitizing
 
 Hyphens: 
 * Replaces "--" across all the text with dashes.<br>Example: "-- We are not the same, -- Aquasha said." -> "– We are not the same, – Aquasha said."
-* Repalces hyphens at the start of each line with dashes.<br>Example: "- This place is wonderful!" -> "– This place is wonderful!"
+* Replaces hyphens at the start of each line with dashes.<br>Example: "- This place is wonderful!" -> "– This place is wonderful!"
 * Solves these cases: "a -b" -> "a-b", "a- b" -> "a-b"
 
 Spaces: 
