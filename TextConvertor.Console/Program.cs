@@ -3,10 +3,8 @@ using Microsoft.Extensions.Hosting;
 
 namespace TextConvertor.Console;
 
-internal class Program
+public class Program
 {
-    // private static readonly FileSanitizer _convertor = new();
-
     private static void Main( string[] args )
     {
         BuildHost()

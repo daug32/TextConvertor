@@ -1,10 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextConvertor", "TextConvertor\TextConvertor.csproj", "{2F0060DC-72A8-4F86-BFDE-B6EB92F613CD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextConvertorTests", "TextConvertorTests\TextConvertorTests.csproj", "{6EF782EB-D8D1-4F85-A7ED-F5D0F7A82111}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextConvertor.Core", "TextConvertor.Core\TextConvertor.Core.csproj", "{2F0060DC-72A8-4F86-BFDE-B6EB92F613CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextConvertor.Console", "TextConvertor.Console\TextConvertor.Console.csproj", "{32051E08-FC55-41D5-B6B1-66BC8758784E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CD47FB1A-6539-476E-BD29-79EB9A8052CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextConvertor.Core.Tests", "Tests\TextConvertor.Core.Tests\TextConvertor.Core.Tests.csproj", "{A682187E-A1CA-4B98-90EB-1A60F7C8786B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,13 +18,16 @@ Global
 		{2F0060DC-72A8-4F86-BFDE-B6EB92F613CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F0060DC-72A8-4F86-BFDE-B6EB92F613CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F0060DC-72A8-4F86-BFDE-B6EB92F613CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6EF782EB-D8D1-4F85-A7ED-F5D0F7A82111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6EF782EB-D8D1-4F85-A7ED-F5D0F7A82111}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6EF782EB-D8D1-4F85-A7ED-F5D0F7A82111}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6EF782EB-D8D1-4F85-A7ED-F5D0F7A82111}.Release|Any CPU.Build.0 = Release|Any CPU
 		{32051E08-FC55-41D5-B6B1-66BC8758784E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32051E08-FC55-41D5-B6B1-66BC8758784E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32051E08-FC55-41D5-B6B1-66BC8758784E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32051E08-FC55-41D5-B6B1-66BC8758784E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A682187E-A1CA-4B98-90EB-1A60F7C8786B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A682187E-A1CA-4B98-90EB-1A60F7C8786B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A682187E-A1CA-4B98-90EB-1A60F7C8786B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A682187E-A1CA-4B98-90EB-1A60F7C8786B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A682187E-A1CA-4B98-90EB-1A60F7C8786B} = {CD47FB1A-6539-476E-BD29-79EB9A8052CE}
 	EndGlobalSection
 EndGlobal

@@ -1,120 +1,80 @@
-﻿using TextConvertor.Models;
-using TextConvertor.Services;
+﻿using TextConvertor.Console.CommandLineServices;
+using TextConvertor.Console.CommandLineServices.Models;
+using TextConvertor.Console.Extensions;
+using TextConvertor.Console.TextConvertorHandlers;
+using TextConvertor.Core.Sanitizers;
 
 namespace TextConvertor.Console;
 
 public class TextConvertorApplication
 {
-    private readonly IConvertorFactory _convertorFactory;
+    private readonly IUiService _uiService;
+    private readonly IFileSanitizer _fileSanitizer;
 
-    public TextConvertorApplication( IConvertorFactory convertorFactory )
+    public TextConvertorApplication(
+        IFileSanitizer fileSanitizer,
+        IUiService uiService )
     {
-        _convertorFactory = convertorFactory;
+        _fileSanitizer = fileSanitizer;
+        _fileSanitizer.ProgressNotificator = new ConsoleMessageHandler();
+        _uiService = uiService;
     }
 
     public void Start()
     {
-        System.Console.WriteLine( "Text convertor started in console." );
+        _uiService.PrintApplicationStartedMessage();
 
         while ( true )
         {
-            System.Console.WriteLine( "Enter file path or any command. To get all supported commands type \"help\"" );
+            _uiService.PrintEnterCommandMessage();
 
-            string line = System.Console.ReadLine()!;
-            if ( NeedToExit( line ) )
+            UserResponse response = _uiService.AskForCommand();
+            if ( response.UserAction == UserActionType.Unknown )
+            {
+                _uiService.PrintCommandIsNotRecognizedMessage();
+                continue;
+            }
+                
+            if ( response.UserAction == UserActionType.Exit )
             {
                 break;
             }
 
-            if ( NeedToPrintHelp( line ) )
+            if ( response.UserAction == UserActionType.Help )
             {
-                PrintHelp();
+                _uiService.PrintHelp();
                 continue;
             }
 
-            string filePath = SanitizeFilePath( line );
-            if ( !File.Exists( filePath ) )
-            {
-                System.Console.WriteLine( $"File not found. Path: {filePath}" );
-                continue;
-            }
-
-            SanitizeFile( filePath );
+            ProcessFileOnce( response.SourceFile! );
         }
 
-        System.Console.WriteLine( "Text convertor completed" );
+        _uiService.PrintApplicationCompletedMessage();
     }
 
-    private void SanitizeFile( string path )
+    private void ProcessFileOnce( string filePath )
     {
-        IConvertor convertor = _convertorFactory.Build(
-            ConvertingDestinationType.File,
-            SanitizerType.Ficbook,
-            new ConsoleMessageHandler() );
+        filePath = SanitizeFilePath( filePath );
+        if ( !File.Exists( filePath ) )
+        {
+            _uiService.PrintFileNotFoundMessage( filePath );
+            return;
+        }
 
         try
         {
-            convertor.Convert( path );
+            _fileSanitizer.Sanitize( filePath );
         }
         catch ( Exception ex )
         {
-            PrintExceptionMessage( path, ex );
+            _uiService.PrintExceptionMessage( $"File single processing. File path: {filePath}", ex );
         }
     }
 
     private static string SanitizeFilePath( string line )
     {
-        if ( string.IsNullOrEmpty( line ) )
-        {
-            return String.Empty;
-        }
-
-        string path = line;
-        
-        if ( path.First() == '\"' )
-        {
-            path = path.Remove( 0, 1 );
-        }
-
-        if ( path.Last() == '\"' )
-        {
-            path = path.Remove( path.Length - 1, 1 );
-        }
-
-        if ( String.IsNullOrWhiteSpace( path ) )
-        {
-            return String.Empty;
-        }
-        
-        return Path.GetFullPath( path );
-    }
-
-    private static bool NeedToExit( string line )
-    {
-        return line == "exit";
-    }
-
-    private static bool NeedToPrintHelp( string line )
-    {
-        return line == "help";
-    }
-
-    private static void PrintExceptionMessage( string filePath, Exception ex )
-    {
-        string message =
-            "An error occured while trying to validate file.\n"
-            + $"File path: {filePath}\n"
-            + $"Message: {ex.Message}\n"
-            + $"Stacktrace: {ex.StackTrace}";
-        System.Console.WriteLine( message );
-    }
-
-    private static void PrintHelp()
-    {
-        string message =
-            "Enter file path to process file.\n"
-            + "\"help\" -- shows this message.\n"
-            + "\"exit\" -- exit from application.";
-        System.Console.WriteLine( message );
+        return string.IsNullOrEmpty( line )
+            ? String.Empty
+            : Path.GetFullPath( line.RemoveQuotes() );
     }
 }
